@@ -1,0 +1,62 @@
+name: Build Dynawo Wheels
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers when you push a version tag like v1.7.0
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build_wheels:
+    name: Build wheel on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform_tag: manylinux2014_x86_64
+          - os: windows-latest
+            platform_tag: win_amd64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install build tools
+        run: pip install build wheel
+
+      - name: Build Wheel
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          pip install auditwheel patchelf
+          python -m build --wheel
+          export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH} 
+          auditwheel repair --plat manylinux2014_x86_64 dist/*.whl
+
+      - name: Build Wheel
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          python -m build --wheel
+          mkdir -p wheelhouse
+          mv dist/*.whl wheelhouse/
+
+#      - name: Rename Wheel (Platform Tagging)
+#        shell: bash
+#        run: |
+#          # Ensuring the wheel has the correct OS tag instead of 'any'
+#          cd dist
+#          for f in *.whl; do
+#            mv "$f" "${f%-py3-none-any.whl}-py3-none-${{ matrix.platform_tag }}.whl"
+#          done
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: wheelhouse/*.whl

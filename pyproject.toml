@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "requests"]
+build-backend = "build_backend"
+backend-path = ["."]
+
+[project]
+name = "dynawo-install"
+version = "1.0.0"
+description = "Python wrapper for Dynawo native binaries"
+readme = "README.md"
+authors = [{ name = "Gautier Bureau", email = "gautier.bureau@rte-france.com" }]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+dynawo = "dynawo.dynawo_launcher:main"
+dynaflow-launcher = "dynawo.dynaflow_launcher:main"
+dynawo-algorithms = "dynawo.algorithms_launcher:main"
+
+[tool.setuptools]
+packages = ["dynawo"]
+
+[tool.setuptools.package-data]
+"dynawo" = [
+    "OpenModelica/**/*",
+    "bin/**/*",
+    "cmake/**/*",
+    "ddb/**/*",
+    "etc/**/*",
+    "examples/**/*",
+    "include/**/*",
+    "lib/**/*",
+    "lib64/**/*",
+    "sbin/**/*",
+    "share/**/*",
+    "dynawo.cmd",
+    "dynaflow-launcher.cmd",
+    "dynawo-algorithms.cmd",
+    "dynawo.sh",
+    "dynaflow-launcher.sh",
+    "dynawo-algorithms.sh"
+]

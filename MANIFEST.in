@@ -1,0 +1,26 @@
+# Include entire directory trees
+graft dynawo/OpenModelica
+graft dynawo/bin
+graft dynawo/cmake
+graft dynawo/ddb
+graft dynawo/etc
+graft dynawo/examples
+graft dynawo/include
+graft dynawo/lib
+graft dynawo/lib64
+graft dynawo/sbin
+graft dynawo/share
+
+# Include specific top-level files in the dynawo/ folder
+include dynawo/dynawo.sh
+include dynawo/dynawo-algorithms.sh
+include dynawo/dynaflow-launcher.sh
+
+include dynawo/dynawo.cmd
+include dynawo/dynawo-algorithms.cmd
+include dynawo/dynaflow-launcher.cmd
+
+include build_backend.py
+
+# Global excludes
+global-exclude *.py[cod]

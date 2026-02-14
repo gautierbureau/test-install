@@ -10,8 +10,6 @@ jobs:
   build_wheels_linux:
     name: Build wheel on Linux
     runs-on: ubuntu-latest
-    container:
-      image: quay.io/pypa/manylinux2014_x86_64
 
     steps:
       - name: Checkout code

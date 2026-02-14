@@ -15,6 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install build tools
+        run: docker --version && docker api-version
+
       - name: Build Wheel
         uses: addnab/docker-run-action@v3
         with:

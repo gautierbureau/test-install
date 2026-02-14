@@ -28,9 +28,6 @@ jobs:
               /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
               /opt/python/cp310-cp310/bin/python -m build --wheel
               export LD_LIBRARY_PATH=/build-wheel/dynawo/lib64:/build-wheel/dynawo/lib:$/build-wheel/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH}
-              echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
-              ls /build-wheel/
-              ls /build-wheel/dynawo
               auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
             "
 

@@ -25,7 +25,7 @@ jobs:
             -w /build-wheel \
             quay.io/pypa/manylinux2014_x86_64:latest \
             bash -c "
-              yum install -y liblas
+              yum install -y liblas blas-3.4.2-8.el7.x86_64
               /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
               /opt/python/cp310-cp310/bin/python -m build --wheel
               export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH}

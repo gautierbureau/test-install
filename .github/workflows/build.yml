@@ -25,9 +25,10 @@ jobs:
             -w /build-wheel \
             quay.io/pypa/manylinux2014_x86_64:latest \
             bash -c "
+              yum install -y liblas
               /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
               /opt/python/cp310-cp310/bin/python -m build --wheel
-              export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH} 
+              export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH}
               auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
             "
 

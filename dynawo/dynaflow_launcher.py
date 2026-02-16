@@ -11,9 +11,9 @@ def main():
     else:
         script_name = "dynaflow-launcher.sh"
 
-    script_path = base_path / script_name
+    script_path = os.path.join(base_path, script_name)
 
-    if not script_path.exists():
+    if not os.path.exists(script_path):
         print(f"Error: DynaFlowLauncher binary not found at {script_path}")
         print("This package might have been built for a different Operating System.")
         sys.exit(1)

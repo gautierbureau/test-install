@@ -31,28 +31,6 @@ jobs:
               auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
             "
 
-      # - name: Build Wheel
-      #   uses: addnab/docker-run-action@v3
-      #   with:
-      #     image: quay.io/pypa/manylinux2014_x86_64:latest
-      #     options: -v ${{ github.workspace }}:/build-wheel
-      #     shell: bash
-      #     run: |
-      #       cd /build-wheel
-      #       /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
-      #       /opt/python/cp310-cp310/bin/python -m build --wheel
-      #       export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH} 
-      #       auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
-
-      # - name: Install build tools
-      #   run: /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
-
-      # - name: Build Wheel
-      #   run: |
-      #     /opt/python/cp310-cp310/bin/python -m build --wheel
-      #     export LD_LIBRARY_PATH=${PWD}/dynawo/lib64:${PWD}/dynawo/lib:${PWD}/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH} 
-      #     auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
-
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -4,6 +4,7 @@ import urllib.request
 from setuptools import build_meta as _orig
 import shutil
 import glob
+import stat
 
 dynawo_version='1.7.0'
 dynawo_github_url = "https://github.com/dynawo/dynaflow-launcher"
@@ -33,6 +34,25 @@ def download_binaries():
                 else:
                     os.remove(dst)
             shutil.move(src, dst)
+
+    # Fix file permissions on Linux/Unix systems
+    if os.name != 'nt':
+        shell_scripts = [
+            os.path.join(target_dir, "dynawo.sh"),
+            os.path.join(target_dir, "dynawo-algorithms.sh"),
+            os.path.join(target_dir, "dynaflow-launcher.sh")
+        ]
+        for script in shell_scripts:
+            if os.path.exists(script):
+                os.chmod(script, os.stat(script).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+        for bin_dir in ["bin", "sbin"]:
+            bin_path = os.path.join(target_dir, bin_dir)
+            if os.path.exists(bin_path):
+                for file in os.listdir(bin_path):
+                    file_path = os.path.join(bin_path, file)
+                    if os.path.isfile(file_path) and not file.endswith('.cmake'):
+                        os.chmod(file_path, os.stat(file_path).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
     problematic_patterns = [
         "OpenModelica/lib/x86_64-linux-gnu/omc/libModelicaStandardTables.so*",

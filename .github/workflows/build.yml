@@ -1,9 +1,9 @@
 name: Build Dynawo Wheels
 
 on:
-  push:
-    tags:
-      - 'v*' # Triggers when you push a version tag like v1.7.0
+  release:
+    types:
+      - published
   workflow_dispatch: # Allows manual triggering
 
 jobs:

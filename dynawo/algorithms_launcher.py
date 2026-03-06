@@ -2,7 +2,6 @@ import os
 import subprocess
 import sys
 
-
 def main():
     base_path = os.path.dirname(__file__)
 

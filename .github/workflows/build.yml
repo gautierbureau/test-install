@@ -17,7 +17,9 @@ jobs:
 
       - name: Build Source
         shell: bash
-        run: python -m build --sdist
+        run: |
+          pip install build wheel
+          python -m build --sdist
 
       - name: Upload Artifacts Source
         uses: actions/upload-artifact@v4

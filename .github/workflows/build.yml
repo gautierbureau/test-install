@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Source
-        run: |
-          python -m build --sdist
+        shell: bash
+        run: python -m build --sdist
 
       - name: Upload Artifacts Source
         uses: actions/upload-artifact@v4

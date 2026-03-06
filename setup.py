@@ -85,7 +85,7 @@ class PostDevelopCommand(develop):
         download_binaries(os.path.abspath("."))
 
 setup(
-    # ... other metadata ...
+    zip_safe=False,
     cmdclass={
         'install': PostInstallCommand,
         'develop': PostDevelopCommand,

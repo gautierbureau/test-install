@@ -1,19 +1,21 @@
 import os
 import zipfile
 import urllib.request
-from setuptools import build_meta as _orig
+from setuptools import setup
+from setuptools.command.install import install
+from setuptools.command.develop import develop
 import shutil
 import glob
 import stat
 
-dynawo_version='1.7.0'
-dynawo_github_url = "https://github.com/dynawo/dynaflow-launcher"
-linux_url = f"{dynawo_github_url}/releases/download/v{dynawo_version}/DynaFlowLauncher_Linux_centos7_v{dynawo_version}.zip"
-windows_url = f"{dynawo_github_url}/releases/download/v{dynawo_version}/DynaFlowLauncher_Windows_v{dynawo_version}.zip"
+def download_binaries(target_base_dir):
+    dynawo_version = '1.7.0'
+    dynawo_github_url = "https://github.com/dynawo/dynaflow-launcher"
+    linux_url = f"{dynawo_github_url}/releases/download/v{dynawo_version}/DynaFlowLauncher_Linux_centos7_v{dynawo_version}.zip"
+    windows_url = f"{dynawo_github_url}/releases/download/v{dynawo_version}/DynaFlowLauncher_Windows_v{dynawo_version}.zip"
 
-def download_binaries():
     url = windows_url if os.name == 'nt' else linux_url
-    target_dir = os.path.join(os.path.dirname(__file__), "dynawo")
+    target_dir = os.path.join(target_base_dir, "dynawo", "dynawo")
     zip_path = "dynawo_tmp.zip"
     temp_extract_dir = "temp_extract"
 
@@ -72,21 +74,20 @@ def download_binaries():
 
     os.remove(zip_path)
 
-class _CustomBuildMeta:
-    def __getattr__(self, name):
-        return getattr(_orig, name)
+class PostInstallCommand(install):
+    def run(self):
+        install.run(self)
+        download_binaries(self.install_lib)
 
-    def build_wheel(self, wheel_directory, config_settings=None, metadata_directory=None):
-        download_binaries()
-        return _orig.build_wheel(wheel_directory, config_settings, metadata_directory)
+class PostDevelopCommand(develop):
+    def run(self):
+        develop.run(self)
+        download_binaries(os.path.abspath("."))
 
-    def build_sdist(self, sdist_directory, config_settings=None):
-        download_binaries()
-        return _orig.build_sdist(sdist_directory, config_settings)
-
-
-build_wheel = _CustomBuildMeta().build_wheel
-build_sdist = _CustomBuildMeta().build_sdist
-get_requires_for_build_wheel = _orig.get_requires_for_build_wheel
-get_requires_for_build_sdist = _orig.get_requires_for_build_sdist
-prepare_metadata_for_build_wheel = _orig.prepare_metadata_for_build_wheel
+setup(
+    # ... other metadata ...
+    cmdclass={
+        'install': PostInstallCommand,
+        'develop': PostDevelopCommand,
+    },
+)

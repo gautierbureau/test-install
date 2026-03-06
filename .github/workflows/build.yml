@@ -25,18 +25,18 @@ jobs:
             -w /build-wheel \
             quay.io/pypa/manylinux2014_x86_64:latest \
             bash -c "
-              /opt/python/cp310-cp310/bin/pip install build wheel auditwheel patchelf
+              /opt/python/cp310-cp310/bin/pip install build wheel
               /opt/python/cp310-cp310/bin/python -m build --sdist
-              /opt/python/cp310-cp310/bin/python -m build --wheel
-              export LD_LIBRARY_PATH=/build-wheel/dynawo/lib64:/build-wheel/dynawo/lib:/build-wheel/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH}
-              auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
+#              /opt/python/cp310-cp310/bin/python -m build --wheel
+#              export LD_LIBRARY_PATH=/build-wheel/dynawo/lib64:/build-wheel/dynawo/lib:/build-wheel/dynawo/OpenModelica/lib/x86_64-linux-gnu/omc:${LD_LIBRARY_PATH}
+#              auditwheel repair --plat manylinux2014_x86_64 dist/*.whl -w wheelhouse/
             "
 
-      - name: Upload Artifacts Wheel
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-linux
-          path: wheelhouse/*.whl
+#      - name: Upload Artifacts Wheel
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: wheels-linux
+#          path: wheelhouse/*.whl
 
       - name: Upload Artifacts Source
         uses: actions/upload-artifact@v4
@@ -44,34 +44,34 @@ jobs:
           name: source-linux
           path: dist/*.tar.gz
 
-  build_wheels_windows:
-    name: Build wheel on Windows
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install build tools
-        run: pip install build wheel
-
-      - name: Build Wheel
-        shell: bash
-        run: |
-          python -m build --wheel
-          mkdir -p wheelhouse
-          mv dist/*.whl wheelhouse/
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-windows
-          path: wheelhouse/*.whl
+#  build_wheels_windows:
+#    name: Build wheel on Windows
+#    runs-on: windows-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.10'
+#
+#      - name: Install build tools
+#        run: pip install build wheel
+#
+#      - name: Build Wheel
+#        shell: bash
+#        run: |
+#          python -m build --wheel
+#          mkdir -p wheelhouse
+#          mv dist/*.whl wheelhouse/
+#
+#      - name: Upload Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: wheels-windows
+#          path: wheelhouse/*.whl
 
 #  package:
 #    name: Package wheels

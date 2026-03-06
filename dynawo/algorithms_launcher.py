@@ -11,7 +11,7 @@ def main():
     else:
         script_name = "dynawo-algorithms.sh"
 
-    script_path = os.path.join(base_path, script_name)
+    script_path = os.path.join(base_path, "dynawo", script_name)
 
     if not os.path.exists(script_path):
         print(f"Error: Dynawo algorithms binary not found at {script_path}")
